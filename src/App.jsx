@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useFetch } from "./hooks/useFetch";
 
-function App() {
-  const [count, setCount] = useState(0)
+import './App.css';
 
-  return (
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
+import Card from './components/Card';
+
+const URL_FETCH = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-BR&page=1&sort_by=popularity.desc";
+
+const App = () => {
+
+const { dados: filmes } = useFetch(URL_FETCH);
+
+return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        <NavBar />
 
-export default App
+        <main>
+            <div className="container">
+
+            <h2 className="title">Filmes Populares:</h2>
+
+            <div className="movies-container">
+                {filmes && filmes.results.map((filme) => (
+                    <Card key={filme.id} filme={filme} />
+                ))}
+            </div>
+
+            </div>
+        </main>
+
+        <Footer />
+    </>
+);
+};
+
+export default App;
